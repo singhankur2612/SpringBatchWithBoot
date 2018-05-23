@@ -140,7 +140,7 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     	return stepBuilderFactory.get("step1")
             .<BatchDetails, BatchDetails> chunk(5)
             .reader(reader1())
-            //.processor(processor())
+            .processor(processor())
             .writer(writer1())
             .build();
     }
@@ -150,7 +150,7 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     	return stepBuilderFactory.get("step2")
         	.<BatchDetails,BatchDetails> chunk(5)
             .reader(reader1())
-            //.processor(processor())
+            .processor(processor())
             .writer(writer2())
             .build();
     }

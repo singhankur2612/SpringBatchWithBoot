@@ -4,22 +4,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 
+import com.test.batchtestapp.model.BatchDetails;
 import com.test.batchtestapp.model.Person;
 
-public class PersonItemProcessor implements ItemProcessor<Person, Person> {
+public class PersonItemProcessor implements ItemProcessor<BatchDetails, BatchDetails> {
 
 	private static final Logger log = LoggerFactory.getLogger(PersonItemProcessor.class);
 
     @Override
-    public Person process(final Person person) throws Exception {
-        final String firstName = person.getFirstName().toUpperCase();
-        final String lastName = person.getLastName().toUpperCase();
+    public BatchDetails process(final BatchDetails batchDetails) throws Exception {
+        final String BTCH_RUL_CDE = batchDetails.getBTCH_RUL_CDE().toLowerCase();
+        batchDetails.setRUL_ELGBLE_CSE_CNT(3636);
 
-        final Person transformedPerson = new Person(firstName, lastName,person.getAge());
+        final BatchDetails transformedBatchDetails = new BatchDetails(batchDetails.getBTCH_LOG_DLY_ID(),
+        		batchDetails.getBTCH_JOB_STAT_ID(),BTCH_RUL_CDE,batchDetails.getRUL_ELGBLE_CSE_CNT());
 
-        log.info("Converting (" + person + ") into (" + transformedPerson + ")");
+        log.info("Converting (" + batchDetails + ") into (" + transformedBatchDetails + ")");
 
-        return transformedPerson;
+        return transformedBatchDetails;
     }
 
 

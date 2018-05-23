@@ -30,4 +30,5 @@ echo '=============================='$Data_File
 Output_FILE="C:\\Users\\asing42\\team.txt"
 
 
-java -Xmx100m -Dspring.profiles.active=$env -Dspring.datasource.username=$userName -DinpFile=$Data_File -DoutFile=$Output_FILE -Dspring.datasource.password=$password -jar ./build/libs/FirstBatchWithDB*.jar --spring.batch.job.names=Job1
+java -Xmx100m -Dspring.profiles.active=$env -Dspring.datasource.username=$userName -DinpFile=$Data_File -DoutFile=$Output_FILE -Dspring.datasource.password=$password -jar ./build/libs/SpringBatchWithBoot*.jar
+# --spring.batch.job.names=Job1
