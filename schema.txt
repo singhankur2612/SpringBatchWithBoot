@@ -1,0 +1,9 @@
+desc BTCH_LOG_DLY
+Name               Null     Type         
+------------------ -------- ------------ 
+BTCH_LOG_DLY_ID    NOT NULL NUMBER(8)    
+BTCH_JOB_STAT_ID   NOT NULL NUMBER(8)    
+BTCH_RUL_CDE       NOT NULL VARCHAR2(10) 
+RUL_ELGBLE_CSE_CNT NOT NULL NUMBER(8)    
+RUL_EXEC_STRT_TMS           TIMESTAMP(6) 
+RUL_EXEC_END_TMS            TIMESTAMP(6) 
