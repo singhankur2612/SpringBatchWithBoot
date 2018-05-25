@@ -22,13 +22,12 @@ fi
 
 # INPUT FILE
 # ======================================================================
-Data_File="Records.csv"
+Data_File="C:\\Users\\asing42\\test\\Data.csv"
 echo '=============================='$Data_File
 
 # Output FILE
 # ======================================================================
-Output_FILE="C:\\Users\\asing42\\team.txt"
+Output_FILE="C:\\Users\\asing42\\test\\team.txt"
 
 
-java -Xmx100m -Dspring.profiles.active=$env -Dspring.datasource.username=$userName -DinpFile=$Data_File -DoutFile=$Output_FILE -Dspring.datasource.password=$password -jar ./build/libs/SpringBatchWithBoot*.jar
-# --spring.batch.job.names=Job1
+java -Xmx100m -Dspring.profiles.active=$env -Dspring.datasource.username=$userName -DinpFile=$Data_File -DoutFile=$Output_FILE -Dspring.datasource.password=$password -jar ./build/libs/SpringBatchWithBoot*.jar --spring.batch.job.names=Job1

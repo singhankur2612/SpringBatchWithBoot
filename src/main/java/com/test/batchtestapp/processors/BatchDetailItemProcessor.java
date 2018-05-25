@@ -7,9 +7,9 @@ import org.springframework.batch.item.ItemProcessor;
 import com.test.batchtestapp.model.BatchDetails;
 import com.test.batchtestapp.model.Person;
 
-public class PersonItemProcessor implements ItemProcessor<BatchDetails, BatchDetails> {
+public class BatchDetailItemProcessor implements ItemProcessor<BatchDetails, BatchDetails> {
 
-	private static final Logger log = LoggerFactory.getLogger(PersonItemProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(BatchDetailItemProcessor.class);
 
     @Override
     public BatchDetails process(final BatchDetails batchDetails) throws Exception {
