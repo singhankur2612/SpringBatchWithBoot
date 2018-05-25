@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 
+import com.test.batchtestapp.constants.PropertyConstants;
 import com.test.batchtestapp.listner.JobCompletionNotificationListener;
 import com.test.batchtestapp.model.BatchDetails;
 import com.test.batchtestapp.processors.BatchDetailItemProcessor;
@@ -76,7 +77,7 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     		DelimitedLineAggregator<BatchDetails> lineAggregator = new DelimitedLineAggregator<>();
     		lineAggregator.setDelimiter("@");
     		BeanWrapperFieldExtractor extractor = new BeanWrapperFieldExtractor();
-    		extractor.setNames(new String[]{"BTCH_LOG_DLY_ID","BTCH_JOB_STAT_ID","BTCH_RUL_CDE","RUL_ELGBLE_CSE_CNT"});
+    		extractor.setNames(PropertyConstants.sqlParam);
     		lineAggregator.setFieldExtractor(extractor);
     		itemWriter.setLineAggregator(lineAggregator);
     		
@@ -91,8 +92,7 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     public JdbcBatchItemWriter<BatchDetails> writer1() {
     	JdbcBatchItemWriter<BatchDetails> itemWriter=new JdbcBatchItemWriter<>();
     	itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<BatchDetails>());
-		itemWriter.setSql("INSERT INTO BTCH_LOG_DLY(BTCH_LOG_DLY_ID,BTCH_JOB_STAT_ID,BTCH_RUL_CDE,RUL_ELGBLE_CSE_CNT)"
-				+ "values(:BTCH_LOG_DLY_ID,:BTCH_JOB_STAT_ID,:BTCH_RUL_CDE,:RUL_ELGBLE_CSE_CNT)");
+		itemWriter.setSql(PropertyConstants.sqlStat);
 		itemWriter.setDataSource(dataSource);
 		return itemWriter;
     }
