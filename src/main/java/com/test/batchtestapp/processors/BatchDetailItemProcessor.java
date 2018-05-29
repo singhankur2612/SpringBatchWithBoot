@@ -13,6 +13,7 @@ public class BatchDetailItemProcessor implements ItemProcessor<BatchDetails, Bat
 
     @Override
     public BatchDetails process(final BatchDetails batchDetails) throws Exception {
+    	System.out.println("*********************in BatchDetailItemProcessor*************************");
         final String BTCH_RUL_CDE = batchDetails.getBTCH_RUL_CDE().toLowerCase();
         batchDetails.setRUL_ELGBLE_CSE_CNT(3636);
 

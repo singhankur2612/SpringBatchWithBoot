@@ -1,6 +1,7 @@
 consumerEnv=$1
-userName=$2
-password=$3
+userName='FIAT_USER'
+password='user_19may2016'
+
 echo '+++++++++++consumerEnv++++++++++++'$consumerEnv
 echo '+++++++++++userName++++++++++++'$userName
 echo '+++++++++++password++++++++++++'$password
@@ -22,7 +23,7 @@ fi
 
 # INPUT FILE
 # ======================================================================
-Data_File="C:\\Users\\asing42\\test\\Data.csv"
+Data_File="C:\\Users\\asing42\\test\\DataTest.csv"
 echo '=============================='$Data_File
 
 # Output FILE
@@ -30,4 +31,4 @@ echo '=============================='$Data_File
 Output_FILE="C:\\Users\\asing42\\test\\team.txt"
 
 
-java -Xmx100m -Dspring.profiles.active=$env -Dspring.datasource.username=$userName -DinpFile=$Data_File -DoutFile=$Output_FILE -Dspring.datasource.password=$password -jar ./build/libs/SpringBatchWithBoot*.jar --spring.batch.job.names=Job1
+java -Xmx100m -Dspring.profiles.active=$env -Dspring.datasource.username=$userName -DinpFile=$Data_File -DoutFile=$Output_FILE -Dspring.datasource.password=$password -jar ./build/libs/SpringBatchWithBoot*.jar --spring.batch.job.names=jobWriteDataInDB

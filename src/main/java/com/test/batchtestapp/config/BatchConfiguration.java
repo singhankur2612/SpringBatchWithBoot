@@ -47,8 +47,8 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     public void setDataSource(DataSource dataSource) {}
     
     @Bean
-    public FlatFileItemReader<BatchDetails> reader1() {
-    	System.out.println("*********************in reader1*************************");
+    public FlatFileItemReader<BatchDetails> dataReader() {
+    	System.out.println("*********************in dataReader*************************");
     	FlatFileItemReader<BatchDetails> itemreader =new FlatFileItemReader<BatchDetails>();
     	itemreader.setResource(new FileSystemResource(System.getProperty("inpFile")));
     	itemreader.setLineMapper(new DefaultLineMapper<BatchDetails>(){{
@@ -65,12 +65,13 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     
     @Bean
     public BatchDetailItemProcessor processor() {
+    	System.out.println("*********************in BatchDetailItemProcessor.processor*************************");
         return new BatchDetailItemProcessor();
     }
     
     @Bean
-    public FlatFileItemWriter<BatchDetails> writer2() {
-    	System.out.println("*********************in writer2*************************");
+    public FlatFileItemWriter<BatchDetails> writerToWriteDataInFile() {
+    	System.out.println("*********************in writerToWriteDataInFile*************************");
     	FlatFileItemWriter<BatchDetails> itemWriter=new FlatFileItemWriter<>();
     	try {
     		itemWriter.setResource(new FileSystemResource(System.getProperty("outFile")));
@@ -89,7 +90,8 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     }
     
     @Bean
-    public JdbcBatchItemWriter<BatchDetails> writer1() {
+    public JdbcBatchItemWriter<BatchDetails> writerToWriteDataInDB() {
+    	System.out.println("*********************in JdbcBatchItemWriter*************************");
     	JdbcBatchItemWriter<BatchDetails> itemWriter=new JdbcBatchItemWriter<>();
     	itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<BatchDetails>());
 		itemWriter.setSql(PropertyConstants.sqlStat);
@@ -98,42 +100,46 @@ public class BatchConfiguration extends DefaultBatchConfigurer{
     }
     
     @Bean
-    public Job Job1(JobCompletionNotificationListener listener) {
-    	return jobBuilderFactory.get("Job1")
+    public Job jobWriteDataInDB(JobCompletionNotificationListener listener) {
+    	System.out.println("*********************in jobWriteDataInDB*************************");
+    	return jobBuilderFactory.get("jobWriteDataInDB")
             .incrementer(new RunIdIncrementer())
             .listener(listener)
-            .flow(step1())
+            .flow(stepWriteDataInDB())
             .end()
             .build();
     }
     
     @Bean
-    public Job Job2(JobCompletionNotificationListener listener) {
-    	return jobBuilderFactory.get("Job2")
+    public Job jobWriteDataInFile(JobCompletionNotificationListener listener) {
+    	System.out.println("*********************in jobWriteDataInFile*************************");
+    	return jobBuilderFactory.get("jobWriteDataInFile")
             .incrementer(new RunIdIncrementer())
             .listener(listener)
-            .flow(step2())
+            .flow(stepWriteDataInFile())
             .end()
             .build();
     }
 
     @Bean
-    public Step step1() {
-    	return stepBuilderFactory.get("step1")
+    public Step stepWriteDataInDB() {
+    	System.out.println("*********************in stepWriteDataInDB*************************");
+    	return stepBuilderFactory.get("stepWriteDataInDB")
             .<BatchDetails, BatchDetails> chunk(5)
-            .reader(reader1())
+            .reader(dataReader())
             .processor(processor())
-            .writer(writer1())
+            .writer(writerToWriteDataInDB())
             .build();
     }
     
     @Bean
-    public Step step2() {
-    	return stepBuilderFactory.get("step2")
+    public Step stepWriteDataInFile() {
+    	System.out.println("*********************in stepWriteDataInFile*************************");
+    	return stepBuilderFactory.get("stepWriteDataInFile")
         	.<BatchDetails,BatchDetails> chunk(5)
-            .reader(reader1())
+            .reader(dataReader())
             .processor(processor())
-            .writer(writer2())
+            .writer(writerToWriteDataInFile())
             .build();
     }
     // end::jobstep[]
