@@ -2,6 +2,8 @@ package com.test.batchtestapp.config;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -40,9 +42,11 @@ public class BatchConfigToWriteInDB extends DefaultBatchConfigurer{
     @Override
     public void setDataSource(DataSource dataSource) {}
 	
+    private static final Logger logger = LoggerFactory.getLogger(BatchConfigToWriteInDB.class);
+    
 	@Bean
     public Job jobWriteDataInDB(JobCompletionNotificationListener listener) {
-    	System.out.println("*********************in jobWriteDataInDB*************************");
+    	logger.info("*********************in jobWriteDataInDB*************************");
     	return jobBuilderFactory.get("jobWriteDataInDB")
             .incrementer(new RunIdIncrementer())
             .listener(listener)
@@ -52,7 +56,7 @@ public class BatchConfigToWriteInDB extends DefaultBatchConfigurer{
     }
     @Bean
     public Step stepWriteDataInDB() {
-    	System.out.println("*********************in stepWriteDataInDB*************************");
+    	logger.info("*********************in stepWriteDataInDB*************************");
     	return stepBuilderFactory.get("stepWriteDataInDB")
             .<BatchDetails, BatchDetails> chunk(5)
             .reader(dataReader())
@@ -63,7 +67,7 @@ public class BatchConfigToWriteInDB extends DefaultBatchConfigurer{
     
     @Bean
     public FlatFileItemReader<BatchDetails> dataReader() {
-    	System.out.println("*********************in dataReader*************************");
+    	logger.info("*********************in dataReader*************************");
     	FlatFileItemReader<BatchDetails> itemreader =new FlatFileItemReader<BatchDetails>();
     	itemreader.setResource(new FileSystemResource(System.getProperty("inpFile")));
     	itemreader.setLineMapper(new DefaultLineMapper<BatchDetails>(){{
@@ -80,13 +84,13 @@ public class BatchConfigToWriteInDB extends DefaultBatchConfigurer{
     
     @Bean
     public BatchDetailItemProcessor processor() {
-    	System.out.println("*********************in BatchDetailItemProcessor.processor*************************");
+    	logger.info("*********************in BatchDetailItemProcessor.processor*************************");
         return new BatchDetailItemProcessor();
     }
     
     @Bean
     public JdbcBatchItemWriter<BatchDetails> writerToWriteDataInDB() {
-    	System.out.println("*********************in JdbcBatchItemWriter*************************");
+    	logger.info("*********************in JdbcBatchItemWriter*************************");
     	JdbcBatchItemWriter<BatchDetails> itemWriter=new JdbcBatchItemWriter<>();
     	itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<BatchDetails>());
 		itemWriter.setSql(PropertyConstants.sqlStat);

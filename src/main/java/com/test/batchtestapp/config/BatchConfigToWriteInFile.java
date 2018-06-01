@@ -2,6 +2,8 @@ package com.test.batchtestapp.config;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -36,9 +38,11 @@ public class BatchConfigToWriteInFile {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
     
+    private static final Logger logger = LoggerFactory.getLogger(BatchConfigToWriteInFile.class);
+    
     @Bean
     public Job jobWriteDataInFile(JobCompletionNotificationListener listener) {
-    	System.out.println("*********************in jobWriteDataInFile*************************");
+    	logger.info("*********************in jobWriteDataInFile*************************");
     	return jobBuilderFactory.get("jobWriteDataInFile")
             .incrementer(new RunIdIncrementer())
             .listener(listener)
@@ -51,7 +55,7 @@ public class BatchConfigToWriteInFile {
     
     @Bean
     public Step stepWriteDataInFile() {
-    	System.out.println("*********************in stepWriteDataInFile*************************");
+    	logger.info("*********************in stepWriteDataInFile*************************");
     	return stepBuilderFactory.get("stepWriteDataInFile")
         	.<BatchDetails,BatchDetails> chunk(5)
             .reader(dataReader())
@@ -62,7 +66,7 @@ public class BatchConfigToWriteInFile {
     
     @Bean
     public FlatFileItemReader<BatchDetails> dataReader() {
-    	System.out.println("*********************in dataReader*************************");
+    	logger.info("*********************in dataReader*************************");
     	FlatFileItemReader<BatchDetails> itemreader =new FlatFileItemReader<BatchDetails>();
     	itemreader.setResource(new FileSystemResource(System.getProperty("inpFile")));
     	itemreader.setLineMapper(new DefaultLineMapper<BatchDetails>(){{
@@ -79,13 +83,13 @@ public class BatchConfigToWriteInFile {
     
     @Bean
     public BatchDetailItemProcessor processor() {
-    	System.out.println("*********************in BatchDetailItemProcessor.processor*************************");
+    	logger.info("*********************in BatchDetailItemProcessor.processor*************************");
         return new BatchDetailItemProcessor();
     }
     
     @Bean
     public FlatFileItemWriter<BatchDetails> writerToWriteDataInFile() {
-    	System.out.println("*********************in writerToWriteDataInFile*************************");
+    	logger.info("*********************in writerToWriteDataInFile*************************");
     	FlatFileItemWriter<BatchDetails> itemWriter=new FlatFileItemWriter<>();
     	try {
     		itemWriter.setResource(new FileSystemResource(System.getProperty("outFile")));
@@ -95,9 +99,9 @@ public class BatchConfigToWriteInFile {
     		extractor.setNames(PropertyConstants.sqlParam);
     		lineAggregator.setFieldExtractor(extractor);
     		itemWriter.setLineAggregator(lineAggregator);
-    		System.out.println("*********************end writerToWriteDataInFile*************************");
+    		logger.info("*********************end writerToWriteDataInFile*************************");
 		} catch (Exception e) {
-			System.out.println("*********************catch writerToWriteDataInFile*************************");
+			logger.info("*********************catch writerToWriteDataInFile*************************");
 			e.printStackTrace();
 		}
     	return itemWriter;
